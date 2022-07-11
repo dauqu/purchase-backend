@@ -23,6 +23,7 @@ router.get("/", async (req, res) => {
 
 //Add new Item
 router.post("/", async (req, res) => {
+  console.log(req.body);
   try {
     const pool = await mssql.connect(config);
     const result = await pool
@@ -30,10 +31,10 @@ router.post("/", async (req, res) => {
       .query(
         `INSERT INTO ItemMaster (nCategory, cItem, nBranchId, nActive) VALUES (${req.body.nCategory}, '${req.body.cItem}', 1, 1)`
       );
-    if (result.rowsAffected.length === 0) {
+    if (result.rowsAffected.length === 0) { 
       res.status(400).send("Number not registered");
     } else {
-      res.send(result.rowsAffected);
+      res.send(result.rowsAffected); 
     }
   } catch (err) {
     console.log(err);
