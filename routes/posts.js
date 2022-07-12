@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 //Add new Item
-router.post("/", async (req, res) => {
+router.post("/", Validate, async (req, res) => {
   console.log(req.body);
   try {
     const pool = await mssql.connect(config);
@@ -40,5 +40,40 @@ router.post("/", async (req, res) => {
     console.log(err);
   }
 });
+
+
+//Middleware
+async function Validate(req, res, next) {
+  //Check all fields are filled
+  if (
+    req.body.nCategory === undefined ||
+    req.body.nCategory === "" ||
+    req.body.nCategory === null
+  ) {
+    return res.status(400).send("Please fill all fields");
+  }
+
+  if (
+    req.body.cItem === undefined ||
+    req.body.cItem === "" ||
+    req.body.cItem === null
+  ) {
+    return res.status(400).send("Please fill all fields");
+  }
+
+  //Check if cItem already exists
+  const pool = await mssql.connect(config);
+  const result = await pool
+    .request()
+    .query(
+      `SELECT * FROM ItemMaster WHERE (cItem = '${req.body.cItem}')`
+    );
+  if (result.recordset.length > 0) {
+    return res.status(400).send("Item already exists");
+  }
+
+
+  next();
+}
 
 module.exports = router;
