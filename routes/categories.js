@@ -60,7 +60,6 @@ async function Validate(req, res, next) {
   if (result.recordset.length > 0) {
     return res.status(400).send("Category already exists");
   }
-
   next();
 }
 

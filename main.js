@@ -1,14 +1,11 @@
 const express = require("express");
 const app = express();
 
-
 //Allow JSON
 app.use(express.json());
 
 // const connectDB = require("./config/database");
 // connectDB();
-
-
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
