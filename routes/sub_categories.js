@@ -23,7 +23,20 @@ router.get("/", async (req, res) => {
     }
 });
 
-//
+//Create new Item
+router.post("/", async (req, res) => {
+    try {
+        const pool = await mssql.connect(config);
+        //Inster Body Data
+        const result = await pool
+            .request()
+            .query(`INSERT INTO ItemSubCategory (nCategoryID, cCategory, nBranchId, nActive) VALUES ('${req.body.nCategoryID}', '${req.body.cCategory}', 1, 1)`);
+        //Get Last Inserted ID
+        return res.send(result.rowsAffected);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
 
 
 module.exports = router;

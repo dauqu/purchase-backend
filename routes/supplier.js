@@ -22,5 +22,18 @@ router.get("/", async (req, res) => {
 });
 
 //Add new Item
+router.post("/", async (req, res) => {
+    try {
+        const pool = await mssql.connect(config);
+        //Inster Body Data
+        const result = await pool
+            .request()
+            .query(`INSERT INTO SupplierMaster (cSupplier, cAddress, cPhoneNo, nBranchId, nActive) VALUES ('${req.body.cSupplier}', '${req.body.cAddress}', '${req.body.cPhoneNo}', 1, 1)`);
+        //Get Last Inserted ID
+        return res.send(result.rowsAffected);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
 
 module.exports = router;
