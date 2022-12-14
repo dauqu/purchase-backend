@@ -63,16 +63,24 @@ async function Validate(req, res, next) {
   next();
 }
 
-//Delete all categories
-router.delete("/", async (req, res) => {
+//Delete category by id
+router.delete("/:id", async (req, res) => {
   try {
     const pool = await mssql.connect(config);
-    const result = await pool.request().query(`DELETE FROM ItemCategory WHERE (nActive = 1)`);
-
-    return res.send(result.rowsAffected);
+    const result = await pool
+      .request()
+      .query(
+        `DELETE FROM ItemCategory WHERE (nCode = ${req.params.id})`
+      );
+    if (result.rowsAffected.length === 0) {
+      res.status(400).send("Number not registered");
+    } else {
+      res.send(result.rowsAffected);
+    }
   } catch (err) {
     console.log(err);
   }
 });
+
 
 module.exports = router;

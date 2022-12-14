@@ -31,10 +31,10 @@ router.post("/", Validate, async (req, res) => {
       .query(
         `INSERT INTO ItemMaster (nCategory, cItem, nBranchId, nActive) VALUES (${req.body.nCategory}, '${req.body.cItem}', 1, 1)`
       );
-    if (result.rowsAffected.length === 0) { 
+    if (result.rowsAffected.length === 0) {
       res.status(400).send("Number not registered");
     } else {
-      res.send(result.rowsAffected); 
+      res.send(result.rowsAffected);
     }
   } catch (err) {
     console.log(err);
@@ -71,9 +71,26 @@ async function Validate(req, res, next) {
   if (result.recordset.length > 0) {
     return res.status(400).send("Item already exists");
   }
-
-
   next();
 }
+
+//Delete Item
+router.delete("/:id", async (req, res) => {
+  try {
+    const pool = await mssql.connect(config);
+    const result = await pool
+      .request()
+      .query(
+        `DELETE FROM ItemMaster WHERE (nCode = ${req.params.id})`
+      );
+    if (result.rowsAffected.length === 0) {
+      res.status(400).send("Number not registered");
+    } else {
+      res.send(result.rowsAffected);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 module.exports = router;
