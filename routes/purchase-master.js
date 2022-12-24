@@ -17,13 +17,13 @@ router.get("/", async (req, res) => {
       res.send(result.recordset);
     }
   } catch (err) {
-    console.log(err); 
+    console.log(err);
   }
 });
 
 //Add new Item
 router.post("/", async (req, res) => {
-  const { nCategory, dDate, nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive} = req.body;
+  const { nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive } = req.body;
   try {
     const pool = await mssql.connect(config);
     const result = await pool
