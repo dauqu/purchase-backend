@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     const result = await pool
       .request()
       .query(
-        `INSERT INTO Purchasemaster (nCategory, dDate, nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive) VALUES ('${nCategory}', '${dDate}', '${nSupplierId}', '${cReceivedBy}', '${cBillCopy}', '${nBranchId}', '${nActive}')`
+        `INSERT INTO Purchasemaster (nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive) VALUES ('${nSupplierId}', '${cReceivedBy}', '${cBillCopy}', '${nBranchId}', '${nActive}')`
       );
     if (result.rowsAffected.length === 0) {
       res.status(400).send("Number not registered");
