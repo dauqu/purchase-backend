@@ -21,6 +21,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+//Get by subcategory
+router.get("/by-category/:id", async (req, res) => {
+  try {
+    const pool = await mssql.connect(config);
+    const result = await pool
+      .request()
+      .query(`SELECT * FROM ItemMaster WHERE (nCategory = ${req.params.id}) AND (nActive = 1) ORDER BY cItem`
+      );
+    if (result.recordset.length === 0) {
+      res.status(400).send("Number not registered");
+    } else {
+      res.send(result.recordset);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 //Add new Item
 router.post("/", Validate, async (req, res) => {
   console.log(req.body);
