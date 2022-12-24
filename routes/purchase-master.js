@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const mssql = require("mssql");
-const config = require("./../config/sql.js");
+const config = require("../config/sql.js");
 
 //Get all astrologers
 router.get("/", async (req, res) => {

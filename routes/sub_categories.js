@@ -23,6 +23,24 @@ router.get("/", async (req, res) => {
     }
 });
 
+//Get sub-category by category id
+router.get("/by-category/:id", async (req, res) => {
+    try {
+        const pool = await mssql.connect(config);
+        const result = await pool
+            .request()
+            .query(`SELECT * FROM ItemSubCategory WHERE nCategoryID = ${req.params.id}`
+            );
+        if (result.recordset.length === 0) {
+            res.status(400).send("Number not registered");
+        } else {
+            res.send(result.recordset);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 //Create new Item
 router.post("/", async (req, res) => {
     try {
