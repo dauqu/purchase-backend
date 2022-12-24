@@ -24,11 +24,15 @@ router.get("/", async (req, res) => {
 
 //Post request to login
 router.post("/", async (req, res) => {
+
+    //Convert password to base 64
+    const password = Buffer.from(req.body.cPassword).toString('base64');
+
     //Check if user exists
     const pool = await mssql.connect(config);
     const result = await pool
         .request()
-        .query("SELECT * FROM UserMaster WHERE (cUserName = '" + req.body.cUsername + "') AND (cPWD = '" + req.body.cPassword + "')");
+        .query("SELECT * FROM UserMaster WHERE (cUserName = '" + req.body.cUsername + "') AND (cPWD = '" + password + "')");
     if (result.recordset.length === 0) {
         res.status(400).send("Username or password is incorrect");
     } else {
