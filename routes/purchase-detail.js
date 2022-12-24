@@ -24,13 +24,12 @@ router.get("/", async (req, res) => {
 
 //Add new Item
 router.post("/", async (req, res) => {
-    const { nCategory, dDate, nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive } = req.body;
+    const { nPurchaseId, nCategoryId, nItemId, nRate, nQty, cUnit, nSubCategId } = req.body;
     try {
         const pool = await mssql.connect(config);
         const result = await pool
             .request()
-            .query(
-                `INSERT INTO Purchasemaster (nSupplierId, cReceivedBy, cBillCopy, nBranchId, nActive) VALUES ('${nSupplierId}', '${cReceivedBy}', '${cBillCopy}', '${nBranchId}', '${nActive}')`
+            .query(`INSERT INTO Purchasedetail (nPurchaseId, nCategoryId, nItemId, nRate, nQty, cUnit, nSubCategId) VALUES ('${nPurchaseId}', '${nCategoryId}', '${nItemId}', '${nRate}', '${nQty}', '${cUnit}', '${nSubCategId}')`
             );
         if (result.rowsAffected.length === 0) {
             res.status(400).send("Number not registered");
